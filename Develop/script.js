@@ -1,11 +1,9 @@
-// Assignment code here
-
-// generatePassword() function
-
-// startUp() function with initial questions
-var startUp = function () {
+// generatePassword() function with initial questions
+var generatePassword = function () {
   askPasswordLength();
   askPasswordCriteria();
+
+  var password = "";
 
   // Generate random password
   for (var i = 0; i < passwordLength; i++) {
@@ -13,7 +11,10 @@ var startUp = function () {
       password + criteriaArray[randomNumber(0, criteriaArray.length - 1)];
   }
 
-  console.log(password);
+  // Reset password length
+  passwordLength = "";
+
+  return password;
 };
 
 // Creating a function that lets us choose randomly based on two variables
@@ -38,10 +39,6 @@ var askPasswordLength = function () {
     );
   }
 
-  console.log(
-    "You have requested a password length of " + passwordLength + " characters."
-  );
-
   return passwordLength;
 };
 
@@ -61,7 +58,7 @@ var askPasswordCriteria = function () {
   );
 
   // Add uppercase if confirmed
-  if (uppercaseConfirm && !lowercase) {
+  if (uppercaseConfirm && !lowercaseConfirm) {
     criteriaArray = uppercase;
   } else if (uppercaseConfirm) {
     criteriaArray = criteriaArray.concat(uppercase);
@@ -72,20 +69,43 @@ var askPasswordCriteria = function () {
   );
 
   // Add numbers if confirm
-  if (numbersConfirm && !lowercase && !uppercase) {
+  if (numbersConfirm && !lowercaseConfirm && !uppercaseConfirm) {
     criteriaArray = numbers;
   } else if (numbersConfirm) {
     criteriaArray = criteriaArray.concat(numbers);
   }
 
-  if (1 > lowercaseConfirm + uppercaseConfirm + numbersConfirm) {
+  // add special characters if confirm
+  var specialConfirm = window.confirm(
+    "Would you like to use SPECIAL CHARACTERS in your password?"
+  );
+
+  if (
+    specialConfirm &&
+    !lowercaseConfirm &&
+    !uppercaseConfirm &&
+    !numbersConfirm
+  ) {
+    criteriaArray = special;
+  } else if (specialConfirm) {
+    criteriaArray = criteriaArray.concat(special);
+  }
+
+  // Validates one response returns true
+  if (
+    1 >
+    lowercaseConfirm + uppercaseConfirm + numbersConfirm + specialConfirm
+  ) {
     window.alert(
       "Please choose at lease one set of criteria for your password"
     );
     askPasswordCriteria();
-  } else {
-    console.log(lowercaseConfirm + uppercaseConfirm);
   }
+  // Reset confirms
+  lowercaseConfirm = false;
+  uppercaseConfirm = false;
+  numbersConfirm = false;
+  specialConfirm = false;
 };
 
 // Password criteria arrays declarations
@@ -119,6 +139,7 @@ var lowercase = [
   "y",
   "z",
 ];
+
 var uppercase = [
   "A",
   "B",
@@ -147,7 +168,10 @@ var uppercase = [
   "Y",
   "Z",
 ];
+
 var numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+var special = ["!", "#", "$", "%", "&", "@", "^", "*", "+", "-", "/"];
 
 // passwordLength declaration
 var passwordLength = "";
@@ -165,5 +189,3 @@ function writePassword() {
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
-
-startUp();
