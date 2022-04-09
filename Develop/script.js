@@ -44,41 +44,39 @@ var askPasswordLength = function () {
 
 // Asks for which criteria they want to use in a row
 var askPasswordCriteria = function () {
+  // Ask which characters they'd like to use
   var lowercaseConfirm = window.confirm(
     "Would you like to use LOWERCASE letters in your password?"
   );
-
-  // Add lowercase if confirmed
-  if (lowercaseConfirm) {
-    criteriaArray = lowercase;
-  }
 
   var uppercaseConfirm = window.confirm(
     "Would you like to use UPPERCASE letters in your password?"
   );
 
-  // Add uppercase if confirmed
+  var numbersConfirm = window.confirm(
+    "Would you like to use NUMBERS in your password?"
+  );
+
+  var specialConfirm = window.confirm(
+    "Would you like to use SPECIAL CHARACTERS in your password?"
+  );
+
+  // Add characters if confirmed
+  if (lowercaseConfirm) {
+    criteriaArray = lowercase;
+  }
+
   if (uppercaseConfirm && !lowercaseConfirm) {
     criteriaArray = uppercase;
   } else if (uppercaseConfirm) {
     criteriaArray = criteriaArray.concat(uppercase);
   }
 
-  var numbersConfirm = window.confirm(
-    "Would you like to use NUMBERS in your password?"
-  );
-
-  // Add numbers if confirm
   if (numbersConfirm && !lowercaseConfirm && !uppercaseConfirm) {
     criteriaArray = numbers;
   } else if (numbersConfirm) {
     criteriaArray = criteriaArray.concat(numbers);
   }
-
-  // add special characters if confirm
-  var specialConfirm = window.confirm(
-    "Would you like to use SPECIAL CHARACTERS in your password?"
-  );
 
   if (
     specialConfirm &&
@@ -91,7 +89,7 @@ var askPasswordCriteria = function () {
     criteriaArray = criteriaArray.concat(special);
   }
 
-  // Validates one response returns true
+  // Validates if we have at least one set of characters selected
   if (
     1 >
     lowercaseConfirm + uppercaseConfirm + numbersConfirm + specialConfirm
@@ -101,7 +99,8 @@ var askPasswordCriteria = function () {
     );
     askPasswordCriteria();
   }
-  // Reset confirms
+
+  // Reset confirms for next generation
   lowercaseConfirm = false;
   uppercaseConfirm = false;
   numbersConfirm = false;
